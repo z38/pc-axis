@@ -1,0 +1,31 @@
+{
+    "name": "z38/pc-axis",
+    "type": "library",
+    "license": "MIT",
+    "description": "PHP library to read PC-Axis (PX) files",
+    "keywords": ["pc-axis", "px", "statistics"],
+    "homepage": "https://github.com/z38/pc-axis",
+    "authors": [
+        {
+            "name": "z38",
+            "homepage": "https://github.com/z38",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.2|~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Z38\\PcAxis\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Z38\\PcAxis\\Tests\\": "tests/"
+        }
+    }
+}
