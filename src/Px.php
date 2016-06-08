@@ -102,10 +102,9 @@ class Px
         }, $this->variables());
 
         $index = 0;
-        for ($i = 0; $i < count($choices) - 1; $i++) {
+        for ($i = 0; $i < count($choices); ++$i) {
             $index += $choices[$i] * array_product(array_slice($counts, $i + 1));
         }
-        $index += end($choices);
 
         return $index;
     }
@@ -224,11 +223,9 @@ class Px
                 break;
             }
             $remainder .= $line;
-            $i = 0;
             while (($i = self::findQuoted($remainder, ';')) !== false) {
                 $this->parseKeywordLine(substr($remainder, 0, $i));
                 $remainder = substr($remainder, $i + 1);
-                $i = 0;
             }
         }
 
