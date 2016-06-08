@@ -58,12 +58,19 @@ class Px
         $this->charset = self::DEFAULT_CHARSET;
     }
 
+    /**
+     * Returns a list of all variables.
+     *
+     * @return array
+     */
     public function variables()
     {
         return array_merge($this->keyword('STUB')->values, $this->keyword('HEADING')->values);
     }
 
     /**
+     * Returns a list of all possible values of a variable.
+     *
      * @param string $variable
      *
      * @return array
@@ -79,7 +86,9 @@ class Px
     }
 
     /**
-     * @param string variable
+     * Returns a list of all possible codes of a variable.
+     *
+     * @param string $variable
      *
      * @return array|null
      */
@@ -94,7 +103,14 @@ class Px
         return null;
     }
 
-    public function index($choices)
+    /**
+     * Computes the index within the data matrix.
+     *
+     * @param array $indices An array of all value indices
+     *
+     * @return int
+     */
+    public function index($indices)
     {
         $px = $this;
         $counts = array_map(function ($variable) use ($px) {
@@ -102,18 +118,25 @@ class Px
         }, $this->variables());
 
         $index = 0;
-        for ($i = 0; $i < count($choices); ++$i) {
-            $index += $choices[$i] * array_product(array_slice($counts, $i + 1));
+        for ($i = 0; $i < count($indices); ++$i) {
+            $index += $indices[$i] * array_product(array_slice($counts, $i + 1));
         }
 
         return $index;
     }
 
-    public function datum($choices)
+    /**
+     * Gets a single data point.
+     *
+     * @param array $indices An array of all value indices
+     *
+     * @return string
+     */
+    public function datum($indices)
     {
         $this->assertData();
 
-        $index = $this->index($choices);
+        $index = $this->index($indices);
         if (isset($this->data[$index])) {
             return $this->data[$index];
         } else {
@@ -121,6 +144,11 @@ class Px
         }
     }
 
+    /**
+     * Returns a list of all keywords.
+     *
+     * @return array
+     */
     public function keywords()
     {
         $this->assertKeywords();
@@ -128,6 +156,13 @@ class Px
         return $this->keywords;
     }
 
+    /**
+     * Returns all keywords with a given name.
+     *
+     * @param string $keyword
+     *
+     * @return array
+     */
     public function keywordList($keyword)
     {
         $this->assertKeywords();
@@ -139,6 +174,13 @@ class Px
         }
     }
 
+    /**
+     * Checks whether a keyword exists.
+     *
+     * @param string $keyword
+     *
+     * @return bool
+     */
     public function hasKeyword($keyword)
     {
         $this->assertKeywords();
@@ -146,6 +188,13 @@ class Px
         return isset($this->keywords[$keyword]);
     }
 
+    /**
+     * Returns the first keyword with a given name.
+     *
+     * @param string $keyword
+     *
+     * @return object
+     */
     public function keyword($keyword)
     {
         $list = $this->keywordList($keyword);
@@ -156,6 +205,11 @@ class Px
         return $list[0];
     }
 
+    /**
+     * Gets all data cells.
+     *
+     * @param array
+     */
     public function data()
     {
         $this->assertData();
