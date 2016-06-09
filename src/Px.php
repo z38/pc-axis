@@ -198,7 +198,7 @@ class Px
     public function keyword($keyword)
     {
         $list = $this->keywordList($keyword);
-        if (!$list) {
+        if (empty($list)) {
             throw new RuntimeException(sprintf('Keyword "%s" does not exist.', $keyword));
         }
 
@@ -231,12 +231,12 @@ class Px
 
         $key = substr($line, 0, $equalPos);
         $data->subKeys = [];
-        if (substr($key, -1) == ')' && ($start = self::findQuotedReverse($key, '(')) !== false) {
+        if (substr($key, -1) === ')' && ($start = self::findQuotedReverse($key, '(')) !== false) {
             $data->subKeys = self::split(substr($key, $start + 1, -1));
             $key = substr($key, 0, $start);
         }
         $data->lang = null;
-        if (substr($key, -1) == ']' && ($start = self::findQuotedReverse($key, '[')) !== false) {
+        if (substr($key, -1) === ']' && ($start = self::findQuotedReverse($key, '[')) !== false) {
             $data->lang = trim(substr($key, $start + 1, -1), '"');
             $key = substr($key, 0, $start);
         }
@@ -305,13 +305,13 @@ class Px
         $cells = [];
         $len = strlen($raw);
         $value = '';
-        for ($i = 0;$i < $len;$i++) {
-            if (!$value && $raw[$i] == '"' && ($end = strpos($raw, '"', $i + 1)) !== false) {
+        for ($i = 0; $i < $len; $i++) {
+            if ($value === '' && $raw[$i] === '"' && ($end = strpos($raw, '"', $i + 1)) !== false) {
                 $cells[] = substr($raw, $i + 1, $end - $i - 1);
                 $i = $end;
                 $value = '';
             } elseif (in_array($raw[$i], [' ', ',', ';', "\t"])) {
-                if ($value) {
+                if ($value !== '') {
                     $cells[] = $value;
                     $value = '';
                 }
@@ -319,7 +319,7 @@ class Px
                 $value .= $raw[$i];
             }
         }
-        if ($value) {
+        if ($value !== '') {
             $cells[] = $value;
         }
 
