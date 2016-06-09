@@ -7,6 +7,7 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
 
 return Symfony\CS\Config\Config::create()
     ->fixers([
+        '-psr0',
         '-phpdoc_short_description',
         '-empty_return',
         '-pre_increment',
