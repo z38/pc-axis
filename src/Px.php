@@ -48,6 +48,11 @@ class Px
     private $codepage;
 
     /**
+     * @var array
+     */
+    private $indexMultipliers;
+
+    /**
      * Constructor
      *
      * @param string $path path to your PX file
@@ -112,14 +117,11 @@ class Px
      */
     public function index($indices)
     {
-        $px = $this;
-        $counts = array_map(function ($variable) use ($px) {
-            return count($px->values($variable));
-        }, $this->variables());
+        $this->assertIndexMultipliers();
 
         $index = 0;
-        for ($i = 0; $i < count($indices); ++$i) {
-            $index += $indices[$i] * array_product(array_slice($counts, $i + 1));
+        for ($i = 0, $length = count($this->indexMultipliers); $i < $length; ++$i) {
+            $index += $indices[$i] * $this->indexMultipliers[$i];
         }
 
         return $index;
@@ -326,6 +328,22 @@ class Px
         $this->data = $cells;
 
         fclose($this->handle);
+    }
+
+    private function assertIndexMultipliers()
+    {
+        if ($this->indexMultipliers !== null) {
+            return;
+        }
+
+        $variables = $this->variables();
+        $count = count($variables);
+
+        $this->indexMultipliers = [];
+        $this->indexMultipliers[$count - 1] = 1;
+        for ($i = $count - 2; $i >= 0; --$i) {
+            $this->indexMultipliers[$i] = count($this->values($variables[$i + 1])) * $this->indexMultipliers[$i + 1];
+        }
     }
 
     private function decodeLine($line)
