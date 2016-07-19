@@ -70,7 +70,10 @@ class Px
      */
     public function variables()
     {
-        return array_merge($this->keyword('STUB')->values, $this->keyword('HEADING')->values);
+      if(!$this->keyword('STUB')) {
+        return $this->keyword('HEADING')->values;
+      }
+      return array_merge($this->keyword('STUB')->values, $this->keyword('HEADING')->values);
     }
 
     /**
@@ -201,6 +204,7 @@ class Px
     {
         $list = $this->keywordList($keyword);
         if (empty($list)) {
+            if ($keyword === 'STUB') { return false; }
             throw new RuntimeException(sprintf('Keyword "%s" does not exist.', $keyword));
         }
 
