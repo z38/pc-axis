@@ -24,6 +24,16 @@ class PxTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testVariablesWithoutStub()
+    {
+        $px = new Px(__DIR__.'/samples/020_ati_tau_102_en.px');
+
+        $this->assertSame(
+            ['Year', 'Quarter'],
+            $px->variables()
+        );
+    }
+
     public function testValues()
     {
         $px = new Px(__DIR__.'/samples/CNA12-20130121.px');
