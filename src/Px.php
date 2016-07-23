@@ -70,7 +70,13 @@ class Px
      */
     public function variables()
     {
-        return array_merge($this->keyword('STUB')->values, $this->keyword('HEADING')->values);
+        if (!$this->hasKeyword('STUB')) {
+            return $this->keyword('HEADING')->values;
+        } elseif (!$this->hasKeyword('HEADING')) {
+            return $this->keyword('STUB')->values;
+        } else {
+            return array_merge($this->keyword('STUB')->values, $this->keyword('HEADING')->values);
+        }
     }
 
     /**
