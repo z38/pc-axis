@@ -70,13 +70,13 @@ class Px
      */
     public function variables()
     {
-      if(!$this->keyword('STUB')) {
-        return $this->keyword('HEADING')->values;
-      }
-      if(!$this->keyword('HEADING')) {
-        return $this->keyword('STUB')->values;
-      }
-      return array_merge($this->keyword('STUB')->values, $this->keyword('HEADING')->values);
+        if (!$this->hasKeyword('STUB')) {
+            return $this->keyword('HEADING')->values;
+        } elseif (!$this->hasKeyword('HEADING')) {
+            return $this->keyword('STUB')->values;
+        } else {
+            return array_merge($this->keyword('STUB')->values, $this->keyword('HEADING')->values);
+        }
     }
 
     /**
@@ -207,7 +207,6 @@ class Px
     {
         $list = $this->keywordList($keyword);
         if (empty($list)) {
-            if ($keyword === 'STUB' || $keyword === 'HEADING') { return false; }
             throw new RuntimeException(sprintf('Keyword "%s" does not exist.', $keyword));
         }
 
